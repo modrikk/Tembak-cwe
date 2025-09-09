@@ -300,13 +300,4 @@
         }, { passive: false });
     </script>
 </body>
-        </html>        document.addEventListener('touchend', function(e) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                e.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, { passive: false });
-    </script>
-</body>
 </html>
