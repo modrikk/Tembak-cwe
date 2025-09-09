@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesan Cinta Romantis</title>
+    <title>Untuk Yang Tercinta</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -67,6 +67,7 @@
             margin-top: 20px;
             flex-wrap: wrap;
             position: relative;
+            min-height: 60px; /* Memberikan ruang untuk tombol tidak yang bergerak */
         }
         
         button {
@@ -85,15 +86,207 @@
             background: linear-gradient(to right, #ff2e63, #ff5e8e);
             color: white;
             z-index: 5;
+            position: relative;
         }
         
         #no {
             background: linear-gradient(to right, #8a8a8a, #acacac);
             color: white;
-            position: absolute;
-            transition: all 0.1s ease;
+            position: relative; /* Diubah dari absolute ke relative */
+            transition: all 0.3s ease;
         }
         
+        button:active {
+            transform: scale(0.96);
+        }
+        
+        #yes:active {
+            background: linear-gradient(to right, #d1003f, #ff2e63);
+        }
+        
+        .hidden-message {
+            display: none;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s infinite;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff2e63;
+            opacity: 0.7;
+            z-index: 1;
+            user-select: none;
+            animation: fall 5s linear infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            5% { transform: scale(1.1); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+        
+        .footer {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            button {
+                padding: 12px 25px;
+                font-size: 1rem;
+                min-width: 120px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Untuk Yang Tercinta</h1>
+        <div class="love-icon">
+            <i class="fas fa-heart"></i>
+        </div>
+        <p>Dari semua hal indah di dunia ini, kamu adalah yang terindah. Maukah kamu menjadi kekasihku dan menemaniku selamanya?</p>
+        
+        <div class="buttons">
+            <button id="yes">Ya, Aku Mau!</button>
+            <button id="no">Tidak</button>
+        </div>
+        
+        <div id="hiddenMessage" class="hidden-message">
+            Aku tahu kamu akan memilih ya! Aku mencintaimu! 💕
+        </div>
+        
+        <div class="footer">
+            Dibuat dengan <i class="fas fa-heart" style="color: #ff2e63;"></i> untukmu
+        </div>
+    </div>
+
+    <script>
+        // Membuat efek hati jatuh
+        function createHearts() {
+            const body = document.querySelector('body');
+            const heartCount = 25;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 4 + 3 + 's';
+                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                heart.style.opacity = Math.random() * 0.5 + 0.3;
+                body.appendChild(heart);
+            }
+        }
+        
+        createHearts();
+        
+        // Interaksi tombol
+        const yesBtn = document.getElementById('yes');
+        const noBtn = document.getElementById('no');
+        const hiddenMessage = document.getElementById('hiddenMessage');
+        const loveText = document.querySelector('p');
+        const buttonsContainer = document.querySelector('.buttons');
+        
+        yesBtn.addEventListener('click', function() {
+            hiddenMessage.style.display = 'block';
+            buttonsContainer.style.display = 'none';
+            loveText.textContent = "Terima kasih telah menerima perasaanku! Aku berjanji akan membahagiakanmu selalu.";
+            
+            // Tambah lebih banyak hati
+            createHearts();
+        });
+        
+        // Membuat tombol "Tidak" bergerak acak ketika disentuh/dihover
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+        
+        noBtn.addEventListener('mouseover', function() {
+            moveButton();
+        });
+        
+        noBtn.addEventListener('click', function() {
+            moveButton();
+        });
+        
+        function moveButton() {
+            // Membuat tombol tidak bergerak secara acak dalam container buttons
+            const maxX = buttonsContainer.offsetWidth - noBtn.offsetWidth;
+            const maxY = buttonsContainer.offsetHeight - noBtn.offsetHeight;
+            
+            const randomX = Math.max(0, Math.min(maxX, Math.floor(Math.random() * maxX)));
+            const randomY = Math.max(0, Math.min(maxY, Math.floor(Math.random() * maxY)));
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+        
+        // Mencegah zoom pada tombol
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+    </script>
+</body>
+</html>        
         button:active {
             transform: scale(0.96);
         }
