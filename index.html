@@ -275,8 +275,8 @@
             const maxY = buttonsContainer.offsetHeight - noBtn.offsetHeight;
             
             // Pastikan nilai tidak negatif
-            const safeMaxX = Math.max(0, maxX);
-            const safeMaxY = Math.max(0, maxY);
+            const safeMaxX = Math.max(20, maxX);
+            const safeMaxY = Math.max(20, maxY);
             
             const randomX = Math.floor(Math.random() * safeMaxX);
             const randomY = Math.floor(Math.random() * safeMaxY);
@@ -285,7 +285,8 @@
             noBtn.style.top = randomY + 'px';
             
             // Tambahkan z-index agar tombol tidak berada di belakang elemen lain
-            noBtn.style.zIndex = '13';
+            noBtn.style.zIndex = '20';
+            noBtn.style.yIndex = '10';
         }
         
         // Mencegah zoom pada tombol
