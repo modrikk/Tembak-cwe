@@ -93,7 +93,7 @@
             background: linear-gradient(to right, #8a8a8a, #acacac);
             color: white;
             position: relative;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
         }
         
         button:active {
@@ -261,32 +261,26 @@
         });
         
         function moveButton() {
-            // Pastikan container buttons memiliki posisi relative
-            buttonsContainer.style.position = 'relative';
-            
-            // Jika ini pertama kali tombol dipindahkan
-            if (!noButtonMoved) {
-                noBtn.style.position = 'absolute';
-                noButtonMoved = true;
-            }
-            
-            // Membuat tombol tidak bergerak secara acak dalam container buttons
-            const maxX = buttonsContainer.offsetWidth - noBtn.offsetWidth;
-            const maxY = buttonsContainer.offsetHeight - noBtn.offsetHeight;
+            // Mengubah area pergerakan menjadi seluruh halaman body, bukan hanya container
+            const maxX = document.body.offsetWidth - noBtn.offsetWidth;
+            const maxY = document.body.offsetHeight - noBtn.offsetHeight;
             
             // Pastikan nilai tidak negatif
-            const safeMaxX = Math.max(20, maxX);
-            const safeMaxY = Math.max(20, maxY);
+            const safeMaxX = Math.max(0, maxX);
+            const safeMaxY = Math.max(0, maxY);
             
             const randomX = Math.floor(Math.random() * safeMaxX);
             const randomY = Math.floor(Math.random() * safeMaxY);
             
+            // Mengubah posisi tombol menjadi fixed agar bisa bergerak di seluruh halaman
+            noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
             
             // Tambahkan z-index agar tombol tidak berada di belakang elemen lain
-            noBtn.style.zIndex = '20';
-            noBtn.style.yIndex = '10';
+            noBtn.style.zIndex = '100';
+            
+            noButtonMoved = true;
         }
         
         // Mencegah zoom pada tombol
@@ -298,6 +292,15 @@
         
         let lastTouchEnd = 0;
         document.addEventListener('touchend', function(e) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+    </script>
+</body>
+        </html>        document.addEventListener('touchend', function(e) {
             const now = (new Date()).getTime();
             if (now - lastTouchEnd <= 300) {
                 e.preventDefault();
