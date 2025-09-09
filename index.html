@@ -67,7 +67,7 @@
             margin-top: 20px;
             flex-wrap: wrap;
             position: relative;
-            min-height: 60px; /* Memberikan ruang untuk tombol tidak yang bergerak */
+            min-height: 60px;
         }
         
         button {
@@ -80,20 +80,20 @@
             font-weight: bold;
             min-width: 140px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: static; /* Pastikan posisi awal statis */
         }
         
         #yes {
             background: linear-gradient(to right, #ff2e63, #ff5e8e);
             color: white;
             z-index: 5;
-            position: relative;
         }
         
         #no {
             background: linear-gradient(to right, #8a8a8a, #acacac);
             color: white;
-            position: relative; /* Diubah dari absolute ke relative */
             transition: all 0.3s ease;
+            position: static; /* Pastikan posisi awal statis */
         }
         
         button:active {
@@ -252,21 +252,34 @@
             moveButton();
         });
         
-        noBtn.addEventListener('click', function() {
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             moveButton();
         });
         
         function moveButton() {
+            // Pastikan container buttons memiliki posisi relative
+            buttonsContainer.style.position = 'relative';
+            
+            // Mengubah posisi tombol "Tidak" menjadi absolute
+            noBtn.style.position = 'absolute';
+            
             // Membuat tombol tidak bergerak secara acak dalam container buttons
             const maxX = buttonsContainer.offsetWidth - noBtn.offsetWidth;
             const maxY = buttonsContainer.offsetHeight - noBtn.offsetHeight;
             
-            const randomX = Math.max(0, Math.min(maxX, Math.floor(Math.random() * maxX)));
-            const randomY = Math.max(0, Math.min(maxY, Math.floor(Math.random() * maxY)));
+            // Pastikan nilai tidak negatif
+            const safeMaxX = Math.max(0, maxX);
+            const safeMaxY = Math.max(0, maxY);
             
-            noBtn.style.position = 'absolute';
+            const randomX = Math.floor(Math.random() * safeMaxX);
+            const randomY = Math.floor(Math.random() * safeMaxY);
+            
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
+            
+            // Tambahkan z-index agar tombol tidak berada di belakang elemen lain
+            noBtn.style.zIndex = '10';
         }
         
         // Mencegah zoom pada tombol
