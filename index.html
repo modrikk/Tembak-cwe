@@ -235,6 +235,7 @@
         
         // Set initial position for the "No" button
         let noButtonMoved = false;
+        let direction = 'right'; // Arah awal pergerakan
         
         yesBtn.addEventListener('click', function() {
             hiddenMessage.style.display = 'block';
@@ -245,7 +246,7 @@
             createHearts();
         });
         
-        // Membuat tombol "Tidak" bergerak acak ketika disentuh/dihover
+        // Membuat tombol "Tidak" bergerak ke arah tertentu ketika disentuh/dihover
         noBtn.addEventListener('touchstart', function(e) {
             e.preventDefault();
             moveButton();
@@ -266,11 +267,36 @@
             const maxY = document.body.offsetHeight - noBtn.offsetHeight;
             
             // Pastikan nilai tidak negatif
-            const safeMaxX = Math.max(0, 50);
-            const safeMaxY = Math.max(0, 50);
+            const safeMaxX = Math.max(0, maxX);
+            const safeMaxY = Math.max(0, maxY);
             
-            const randomX = Math.floor(Math.random() * safeMaxX);
-            const randomY = Math.floor(Math.random() * safeMaxY);
+            let randomX, randomY;
+            
+            // Tentukan arah pergerakan
+            if (direction === 'right') {
+                // Bergerak ke kanan (nilai X tinggi)
+                randomX = Math.floor(Math.random() * safeMaxX * 0.5 + safeMaxX * 0.5);
+                direction = 'down';
+            } else if (direction === 'down') {
+                // Bergerak ke bawah (nilai Y tinggi)
+                randomY = Math.floor(Math.random() * safeMaxY * 0.5 + safeMaxY * 0.5);
+                randomX = Math.floor(Math.random() * safeMaxX);
+                direction = 'left';
+            } else if (direction === 'left') {
+                // Bergerak ke kiri (nilai X rendah)
+                randomX = Math.floor(Math.random() * safeMaxX * 0.5);
+                direction = 'up';
+            } else {
+                // Bergerak ke atas (nilai Y rendah)
+                randomY = Math.floor(Math.random() * safeMaxY * 0.5);
+                randomX = Math.floor(Math.random() * safeMaxX);
+                direction = 'right';
+            }
+            
+            // Jika randomY belum ditentukan, atur ke nilai acak normal
+            if (randomY === undefined) {
+                randomY = Math.floor(Math.random() * safeMaxY);
+            }
             
             // Mengubah posisi tombol menjadi fixed agar bisa bergerak di seluruh halaman
             noBtn.style.position = 'fixed';
@@ -278,7 +304,7 @@
             noBtn.style.top = randomY + 'px';
             
             // Tambahkan z-index agar tombol tidak berada di belakang elemen lain
-            noBtn.style.zIndex = '30'
+            noBtn.style.zIndex = '100';
             
             noButtonMoved = true;
         }
