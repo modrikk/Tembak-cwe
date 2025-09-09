@@ -80,20 +80,20 @@
             font-weight: bold;
             min-width: 140px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: static; /* Pastikan posisi awal statis */
         }
         
         #yes {
             background: linear-gradient(to right, #ff2e63, #ff5e8e);
             color: white;
             z-index: 5;
+            position: relative;
         }
         
         #no {
             background: linear-gradient(to right, #8a8a8a, #acacac);
             color: white;
+            position: relative;
             transition: all 0.3s ease;
-            position: static; /* Pastikan posisi awal statis */
         }
         
         button:active {
@@ -233,6 +233,9 @@
         const loveText = document.querySelector('p');
         const buttonsContainer = document.querySelector('.buttons');
         
+        // Set initial position for the "No" button
+        let noButtonMoved = false;
+        
         yesBtn.addEventListener('click', function() {
             hiddenMessage.style.display = 'block';
             buttonsContainer.style.display = 'none';
@@ -261,8 +264,11 @@
             // Pastikan container buttons memiliki posisi relative
             buttonsContainer.style.position = 'relative';
             
-            // Mengubah posisi tombol "Tidak" menjadi absolute
-            noBtn.style.position = 'absolute';
+            // Jika ini pertama kali tombol dipindahkan
+            if (!noButtonMoved) {
+                noBtn.style.position = 'absolute';
+                noButtonMoved = true;
+            }
             
             // Membuat tombol tidak bergerak secara acak dalam container buttons
             const maxX = buttonsContainer.offsetWidth - noBtn.offsetWidth;
